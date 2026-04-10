@@ -1,37 +1,37 @@
 # XPO SAP HANA Provider
 
-> A custom data store provider for **DevExpress XPO** with **SAP HANA** support, built on top of SAP's official ADO.NET driver.
+> Provedor de armazenamento de dados personalizado para **DevExpress XPO** com suporte ao **SAP HANA**, construído sobre o driver ADO.NET oficial da SAP.
 
-🇧🇷 [Versão em português disponível aqui](README-ptBR.md)
-
----
-
-## Description and Motivation
-
-[DevExpress XPO](https://www.devexpress.com/Products/NET/ORM/) is a high-performance .NET ORM that natively supports several databases (SQL Server, Oracle, MySQL, PostgreSQL, SQLite, etc.), but **does not include native SAP HANA support**.
-
-This project implements a **custom provider** using XPO's `ConnectionProviderSql` extensibility API and SAP's official ADO.NET driver (`Sap.Data.Hana.Core.v2.1`), enabling SAP HANA to be used as a persistence backend in .NET applications that already use (or want to use) XPO as their ORM.
+🇺🇸 [English version available here](README.md)
 
 ---
 
-## Requirements
+## Descrição e Motivação
 
-| Component | Minimum version |
+O [DevExpress XPO](https://www.devexpress.com/Products/NET/ORM/) é um ORM .NET de alta performance que suporta nativamente diversos bancos de dados (SQL Server, Oracle, MySQL, PostgreSQL, SQLite, etc.), mas **não inclui suporte nativo ao SAP HANA**.
+
+Este projeto implementa um **provedor customizado** utilizando a API de extensibilidade `ConnectionProviderSql` do XPO e o driver oficial ADO.NET da SAP (`Sap.Data.Hana.Core.v2.1`), permitindo utilizar o SAP HANA como backend de persistência em aplicações .NET que já utilizam (ou desejam utilizar) o XPO como ORM.
+
+---
+
+## Requisitos
+
+| Componente | Versão mínima |
 |---|---|
 | .NET SDK | 6.0+ |
-| DevExpress XPO | 23.2.4+ (license required) |
+| DevExpress XPO | 23.2.4+ (requer licença) |
 | SAP HANA Client (ADO.NET) | `Sap.Data.Hana.Core.v2.1` 2.17.22+ |
 | SAP HANA Server | 2.0+ |
 
-> ⚠️ **DevExpress License:** The `DevExpress.Xpo` package requires a valid DevExpress license. See [devexpress.com](https://www.devexpress.com) for more information.
+> ⚠️ **Licença DevExpress:** O pacote `DevExpress.Xpo` requer uma licença válida da DevExpress. Consulte [devexpress.com](https://www.devexpress.com) para mais informações.
 >
-> ⚠️ **SAP HANA Driver:** The `Sap.Data.Hana.Core.v2.1` package is available on the official NuGet feed. Make sure the SAP HANA Client is installed in your runtime environment.
+> ⚠️ **Driver SAP HANA:** O pacote `Sap.Data.Hana.Core.v2.1` está disponível no NuGet oficial. Certifique-se de que o SAP HANA Client esteja instalado no ambiente de execução.
 
 ---
 
-## Installation
+## Instalação
 
-### 1. Add NuGet packages to your project
+### 1. Adicionar pacotes NuGet ao seu projeto
 
 ```xml
 <ItemGroup>
@@ -40,7 +40,7 @@ This project implements a **custom provider** using XPO's `ConnectionProviderSql
 </ItemGroup>
 ```
 
-### 2. Reference the `XpoSapHana` project
+### 2. Referenciar o projeto `XpoSapHana`
 
 ```xml
 <ItemGroup>
@@ -50,17 +50,17 @@ This project implements a **custom provider** using XPO's `ConnectionProviderSql
 
 ---
 
-## Quick Start
+## Início Rápido
 
 ```csharp
 using DevExpress.Xpo;
 using DevExpress.Xpo.DB;
 using XpoSapHana;
 
-// 1. Ensure the assembly is loaded (the provider registers itself automatically)
+// 1. Garante que o assembly seja carregado (o provider é registrado automaticamente)
 _ = typeof(HanaConnectionProvider);
 
-// 2. Build the connection string
+// 2. Cria a connection string
 var connectionString = HanaDataStoreFactory.CreateConnectionString(
     host: "hana-server",
     port: 30015,
@@ -68,24 +68,24 @@ var connectionString = HanaDataStoreFactory.CreateConnectionString(
     password: "YourPassword123"
 );
 
-// 3. Create the DataLayer
+// 3. Cria o DataLayer
 var dataStore = HanaDataStoreFactory.Create(connectionString, AutoCreateOption.DatabaseAndSchema);
 XpoDefault.DataLayer = XpoDefault.GetDataLayer(dataStore, AutoCreateOption.DatabaseAndSchema);
 
-// 4. CRUD with UnitOfWork
+// 4. CRUD com UnitOfWork
 using var uow = new UnitOfWork();
-var customer = new Customer(uow) { Name = "John Smith", Email = "john@example.com" };
+var customer = new Customer(uow) { Name = "João Silva", Email = "joao@example.com" };
 await uow.CommitChangesAsync();
 
-// 5. Query
+// 5. Consulta
 var customers = uow.Query<Customer>().ToList();
 ```
 
 ---
 
-## XPO → SAP HANA Type Mapping
+## Mapeamento de Tipos XPO → SAP HANA
 
-| XPO `DBColumnType` | SAP HANA Type |
+| XPO `DBColumnType` | Tipo SAP HANA |
 |---|---|
 | `Boolean` | `BOOLEAN` |
 | `Byte` | `TINYINT` |
@@ -102,15 +102,15 @@ var customers = uow.Query<Customer>().ToList();
 | `DateTime` | `TIMESTAMP` |
 | `Guid` | `NVARCHAR(36)` |
 | `String` (≤5000) | `NVARCHAR(N)` |
-| `String` (>5000 or no size) | `NCLOB` |
+| `String` (>5000 ou sem tamanho) | `NCLOB` |
 | `ByteArray` | `BLOB` |
 | `Char` | `NVARCHAR(1)` |
 
 ---
 
-## Registering the Provider
+## Como Registrar o Provider
 
-The provider registers itself **automatically** when the `XpoSapHana` assembly is loaded, thanks to the static constructor of `HanaConnectionProvider`:
+O provider é registrado **automaticamente** quando o assembly `XpoSapHana` é carregado, graças ao construtor estático de `HanaConnectionProvider`:
 
 ```csharp
 static HanaConnectionProvider()
@@ -119,37 +119,37 @@ static HanaConnectionProvider()
 }
 ```
 
-To ensure the assembly is loaded before using XPO, include an explicit type reference:
+Para garantir que o assembly seja carregado antes de usar o XPO, inclua uma referência explícita ao tipo:
 
 ```csharp
-_ = typeof(HanaConnectionProvider); // forces the assembly to load
+_ = typeof(HanaConnectionProvider); // força o carregamento do assembly
 ```
 
-After registration you can also use the provider string token directly:
+Após o registro, você também pode usar o token de provider string diretamente:
 
 ```csharp
-// Format: XpoProvider=SapHana;Server=host:port;UserName=user;Password=pass;
+// Formato: XpoProvider=SapHana;Server=host:port;UserName=user;Password=pass;
 var cs = $"XpoProvider={HanaConnectionProvider.XpoProviderTypeString};{rawConnectionString}";
 var dataStore = XpoDefault.GetConnectionProvider(cs, AutoCreateOption.DatabaseAndSchema);
 ```
 
 ---
 
-## Project Structure
+## Estrutura do Projeto
 
 ```
 xpo-sap-hana-provider/
 ├── src/
 │   └── XpoSapHana/
 │       ├── XpoSapHana.csproj
-│       ├── HanaConnectionProvider.cs   ← main provider (inherits ConnectionProviderSql)
-│       ├── HanaSqlGenerator.cs         ← HANA DDL/DML generator
-│       ├── HanaSchemaProvider.cs       ← schema reader via SYS.TABLES
-│       └── HanaDataStoreFactory.cs     ← convenience factory
+│       ├── HanaConnectionProvider.cs   ← provider principal (herda ConnectionProviderSql)
+│       ├── HanaSqlGenerator.cs         ← gerador de DDL/DML HANA
+│       ├── HanaSchemaProvider.cs       ← leitura de schema via SYS.TABLES
+│       └── HanaDataStoreFactory.cs     ← factory de conveniência
 ├── samples/
 │   └── BasicSample/
 │       ├── BasicSample.csproj
-│       └── Program.cs                  ← working CRUD example
+│       └── Program.cs                  ← exemplo funcional com CRUD
 ├── tests/
 │   └── XpoSapHana.Tests/
 │       ├── XpoSapHana.Tests.csproj
@@ -160,27 +160,27 @@ xpo-sap-hana-provider/
 
 ---
 
-## Contributing
+## Contribuição
 
-Contributions are welcome! To contribute:
+Contribuições são bem-vindas! Para contribuir:
 
-1. Fork the repository
-2. Create a branch for your feature: `git checkout -b feature/my-feature`
-3. Make atomic and descriptive commits
-4. Open a Pull Request describing the changes
+1. Faça um fork do repositório
+2. Crie uma branch para sua feature: `git checkout -b feature/minha-feature`
+3. Faça commits atômicos e descritivos
+4. Abra um Pull Request descrevendo as mudanças
 
-### Guidelines
+### Diretrizes
 
-- Maintain compatibility with .NET 6+
-- Add unit tests for new behaviors
-- Use XML comments (`///`) on all public members
-- Use double-quoted identifiers in all generated SQL (e.g. `"TableName"`)
+- Mantenha a compatibilidade com .NET 6+
+- Adicione testes unitários para novos comportamentos
+- Use comentários XML (`///`) em todos os membros públicos
+- Use identificadores com aspas duplas em todo SQL gerado (ex: `"NomeTabela"`)
 
 ---
 
-## License
+## Licença
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License — veja [LICENSE](LICENSE) para detalhes.
 
 ```
 MIT License
