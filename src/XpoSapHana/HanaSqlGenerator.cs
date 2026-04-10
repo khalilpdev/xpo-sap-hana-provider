@@ -1,3 +1,4 @@
+using System.Linq;
 using DevExpress.Xpo.DB;
 using DevExpress.Xpo.DB.Helpers;
 
@@ -25,7 +26,7 @@ public static class HanaSqlGenerator
         var pk = table.PrimaryKey;
         if (pk != null && pk.Columns.Count > 0)
         {
-            var pkCols = string.Join(", ", pk.Columns.Select(col => $"\"{col}\""));
+            var pkCols = string.Join(", ", pk.Columns.Cast<string>().Select(col => $"\"{col}\""));
             columns.Add($"    CONSTRAINT \"{pk.Name}\" PRIMARY KEY ({pkCols})");
         }
 
@@ -45,7 +46,7 @@ public static class HanaSqlGenerator
         if (index == null) throw new ArgumentNullException(nameof(index));
 
         var unique = index.IsUnique ? "UNIQUE " : string.Empty;
-        var cols = string.Join(", ", index.Columns.Select(c => $"\"{c}\""));
+        var cols = string.Join(", ", index.Columns.Cast<string>().Select(c => $"\"{c}\""));
         return $"CREATE {unique}INDEX \"{index.Name}\" ON \"{table.Name}\" ({cols})";
     }
 
@@ -60,13 +61,11 @@ public static class HanaSqlGenerator
         if (table == null) throw new ArgumentNullException(nameof(table));
         if (fk == null) throw new ArgumentNullException(nameof(fk));
 
-        var localCols = string.Join(", ", fk.Columns.Select(c => $"\"{c}\""));
-        var refCols = string.Join(", ", fk.PrimaryKeyTableKeyColumns.Select(c => $"\"{c}\""));
+        var localCols = string.Join(", ", fk.Columns.Cast<string>().Select(c => $"\"{c}\""));
+        var refCols = string.Join(", ", fk.PrimaryKeyTableKeyColumns.Cast<string>().Select(c => $"\"{c}\""));
         return $"ALTER TABLE \"{table.Name}\" ADD CONSTRAINT \"{fk.Name}\" " +
                $"FOREIGN KEY ({localCols}) REFERENCES \"{fk.PrimaryKeyTable}\" ({refCols})";
     }
-
-    // ---------- helpers ----------
 
     private static string GetHanaType(DBColumn column)
     {
@@ -75,8 +74,8 @@ public static class HanaSqlGenerator
             DBColumnType.Boolean => "BOOLEAN",
             DBColumnType.Byte => "TINYINT",
             DBColumnType.SByte => "SMALLINT",
-            DBColumnType.Short => "SMALLINT",
-            DBColumnType.UShort => "INTEGER",
+            DBColumnType.Int16 => "SMALLINT",
+            DBColumnType.UInt16 => "INTEGER",
             DBColumnType.Int32 => "INTEGER",
             DBColumnType.UInt32 => "BIGINT",
             DBColumnType.Int64 => "BIGINT",

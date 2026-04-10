@@ -18,6 +18,7 @@
 
 using DevExpress.Xpo;
 using DevExpress.Xpo.DB;
+using DevExpress.Xpo.Metadata;
 using XpoSapHana;
 
 // ---------------------------------------------------------------------------
@@ -27,7 +28,7 @@ using XpoSapHana;
 // The provider is automatically registered when the XpoSapHana assembly loads,
 // thanks to the static constructor in HanaConnectionProvider.
 // ---------------------------------------------------------------------------
-_ = typeof(HanaConnectionProvider); // garante que o assembly seja carregado / ensures the assembly is loaded
+_ = typeof(XpoSapHana.HanaConnectionProvider); // garante que o assembly seja carregado / ensures the assembly is loaded
 
 // ---------------------------------------------------------------------------
 // PASSO 2 / STEP 2
@@ -49,7 +50,9 @@ var connectionString = HanaDataStoreFactory.CreateConnectionString(
 // Create the IDataStore and configure XPO's global DataLayer.
 // ---------------------------------------------------------------------------
 var dataStore = HanaDataStoreFactory.Create(connectionString, AutoCreateOption.DatabaseAndSchema);
-XpoDefault.DataLayer = XpoDefault.GetDataLayer(dataStore, AutoCreateOption.DatabaseAndSchema);
+var dictionary = new ReflectionDictionary();
+dictionary.GetDataStoreSchema(typeof(Customer));
+XpoDefault.DataLayer = new ThreadSafeDataLayer(dictionary, dataStore);
 
 Console.WriteLine("Conexão com SAP HANA estabelecida. / SAP HANA connection established.");
 

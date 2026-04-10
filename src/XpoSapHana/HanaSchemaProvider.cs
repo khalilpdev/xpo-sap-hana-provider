@@ -65,8 +65,6 @@ public static class HanaSchemaProvider
             var name = reader.GetString(0);
             var hanaType = reader.GetString(1);
             var size = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
-            var nullable = reader.GetString(3) == "TRUE";
-
             var dbType = MapHanaTypeToDB(hanaType);
             var col = new DBColumn(name, false, string.Empty, size, dbType);
             columns.Add(col);
@@ -124,8 +122,11 @@ public static class HanaSchemaProvider
         return indexDict
             .Select(kv =>
             {
-                var idx = new DBIndex(kv.Key, new StringCollection(kv.Value.cols), kv.Value.isUnique);
-                return idx;
+                var columns = new System.Collections.Specialized.StringCollection();
+                foreach (var column in kv.Value.cols)
+                    columns.Add(column);
+
+                return new DBIndex(kv.Key, columns, kv.Value.isUnique);
             })
             .ToList();
     }
@@ -141,7 +142,7 @@ public static class HanaSchemaProvider
         {
             "BOOLEAN" => DBColumnType.Boolean,
             "TINYINT" => DBColumnType.Byte,
-            "SMALLINT" => DBColumnType.Short,
+            "SMALLINT" => DBColumnType.Int16,
             "INTEGER" or "INT" => DBColumnType.Int32,
             "BIGINT" => DBColumnType.Int64,
             "FLOAT" or "REAL" => DBColumnType.Single,

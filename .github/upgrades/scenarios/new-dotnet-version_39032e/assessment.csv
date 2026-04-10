@@ -1,4 +1,0 @@
-Issue ID,Description,State,Severity,Story Points,Project Path,Location Kind,Path,Line,Column,Incident ID,Help Link,Assembly Name,Assembly Version,Assembly Public Key,Snippet
-Project.0002,Project's target framework(s) needs to be changed,Active,Mandatory,1,samples\BasicSample\BasicSample.csproj,File,samples\BasicSample\BasicSample.csproj,,,,,,,,Current target framework: net6.0 Recommended target framework: net10.0
-Project.0002,Project's target framework(s) needs to be changed,Active,Mandatory,1,src\XpoSapHana\XpoSapHana.csproj,File,src\XpoSapHana\XpoSapHana.csproj,,,,,,,,Current target framework: net6.0 Recommended target framework: net10.0
-Project.0002,Project's target framework(s) needs to be changed,Active,Mandatory,1,tests\XpoSapHana.Tests\XpoSapHana.Tests.csproj,File,tests\XpoSapHana.Tests\XpoSapHana.Tests.csproj,,,,,,,,Current target framework: net6.0 Recommended target framework: net10.0

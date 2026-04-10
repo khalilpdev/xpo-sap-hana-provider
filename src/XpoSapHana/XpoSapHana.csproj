@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>XpoSapHana</RootNamespace>
@@ -10,6 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Xpo" Version="23.2.4" />
-    <PackageReference Include="Sap.Data.Hana.Core.v2.1" Version="2.17.22" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Sap.Data.Hana.Core.v2.1">
+      <HintPath>..\..\lib\Sap.Data.Hana.Core.v2.1.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
   </ItemGroup>
 </Project>

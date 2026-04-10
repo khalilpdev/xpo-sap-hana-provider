@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using DevExpress.Xpo.DB;
 using DevExpress.Xpo.DB.Helpers;
 using Xunit;
@@ -189,7 +190,7 @@ public class HanaConnectionProviderTests
     [Theory]
     [InlineData("INTEGER", DBColumnType.Int32)]
     [InlineData("BIGINT", DBColumnType.Int64)]
-    [InlineData("SMALLINT", DBColumnType.Short)]
+    [InlineData("SMALLINT", DBColumnType.Int16)]
     [InlineData("TINYINT", DBColumnType.Byte)]
     [InlineData("DOUBLE", DBColumnType.Double)]
     [InlineData("FLOAT", DBColumnType.Single)]
