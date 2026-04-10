@@ -10,6 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpoSapHana.Tests", "tests\X
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{68ABA32F-4E56-449B-ACB6-37BB330A8670}"
 	ProjectSection(SolutionItems) = preProject
+		README-ptBR.md = README-ptBR.md
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -34,5 +35,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6C6CADC-81EF-42FC-AF12-2DA67086ECD4}
 	EndGlobalSection
 EndGlobal
