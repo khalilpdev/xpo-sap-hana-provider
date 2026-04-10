@@ -1,0 +1,17 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.nupkg
+*.snupkg
+TestResults/
+
+## Rider
+.idea/
+
+## VS Code
+.vscode/
+
+## Restore / build outputs
